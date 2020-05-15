@@ -1,0 +1,307 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cu.weiketang.mapper.CourseMapper">
+  <resultMap id="BaseResultMap" type="com.cu.weiketang.pojo.Course">
+    <constructor>
+      <idArg column="cid" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="cname" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="cpicture" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="cintroduce" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="cgrade" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="crequirements" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="cnumber" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="uid" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="update_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />
+      <arg column="state" javaType="java.lang.Boolean" jdbcType="BIT" />
+    </constructor>
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    cid, cname, cpicture, cintroduce, cgrade, crequirements, cnumber, uid, update_time, 
+    state
+  </sql>
+  <select id="selectByExample" parameterType="com.cu.weiketang.pojo.CourseExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from course
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from course
+    where cid = #{cid,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from course
+    where cid = #{cid,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.cu.weiketang.pojo.CourseExample">
+    delete from course
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.cu.weiketang.pojo.Course">
+    <selectKey keyProperty="cid" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into course (cname, cpicture, cintroduce, 
+      cgrade, crequirements, cnumber, 
+      uid, update_time, state
+      )
+    values (#{cname,jdbcType=VARCHAR}, #{cpicture,jdbcType=VARCHAR}, #{cintroduce,jdbcType=VARCHAR}, 
+      #{cgrade,jdbcType=VARCHAR}, #{crequirements,jdbcType=INTEGER}, #{cnumber,jdbcType=VARCHAR}, 
+      #{uid,jdbcType=INTEGER}, #{updateTime,jdbcType=TIMESTAMP}, #{state,jdbcType=BIT}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.cu.weiketang.pojo.Course">
+    <selectKey keyProperty="cid" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into course
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="cname != null">
+        cname,
+      </if>
+      <if test="cpicture != null">
+        cpicture,
+      </if>
+      <if test="cintroduce != null">
+        cintroduce,
+      </if>
+      <if test="cgrade != null">
+        cgrade,
+      </if>
+      <if test="crequirements != null">
+        crequirements,
+      </if>
+      <if test="cnumber != null">
+        cnumber,
+      </if>
+      <if test="uid != null">
+        uid,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+      <if test="state != null">
+        state,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="cname != null">
+        #{cname,jdbcType=VARCHAR},
+      </if>
+      <if test="cpicture != null">
+        #{cpicture,jdbcType=VARCHAR},
+      </if>
+      <if test="cintroduce != null">
+        #{cintroduce,jdbcType=VARCHAR},
+      </if>
+      <if test="cgrade != null">
+        #{cgrade,jdbcType=VARCHAR},
+      </if>
+      <if test="crequirements != null">
+        #{crequirements,jdbcType=INTEGER},
+      </if>
+      <if test="cnumber != null">
+        #{cnumber,jdbcType=VARCHAR},
+      </if>
+      <if test="uid != null">
+        #{uid,jdbcType=INTEGER},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="state != null">
+        #{state,jdbcType=BIT},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.cu.weiketang.pojo.CourseExample" resultType="java.lang.Long">
+    select count(*) from course
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update course
+    <set>
+      <if test="record.cid != null">
+        cid = #{record.cid,jdbcType=INTEGER},
+      </if>
+      <if test="record.cname != null">
+        cname = #{record.cname,jdbcType=VARCHAR},
+      </if>
+      <if test="record.cpicture != null">
+        cpicture = #{record.cpicture,jdbcType=VARCHAR},
+      </if>
+      <if test="record.cintroduce != null">
+        cintroduce = #{record.cintroduce,jdbcType=VARCHAR},
+      </if>
+      <if test="record.cgrade != null">
+        cgrade = #{record.cgrade,jdbcType=VARCHAR},
+      </if>
+      <if test="record.crequirements != null">
+        crequirements = #{record.crequirements,jdbcType=INTEGER},
+      </if>
+      <if test="record.cnumber != null">
+        cnumber = #{record.cnumber,jdbcType=VARCHAR},
+      </if>
+      <if test="record.uid != null">
+        uid = #{record.uid,jdbcType=INTEGER},
+      </if>
+      <if test="record.updateTime != null">
+        update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.state != null">
+        state = #{record.state,jdbcType=BIT},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update course
+    set cid = #{record.cid,jdbcType=INTEGER},
+      cname = #{record.cname,jdbcType=VARCHAR},
+      cpicture = #{record.cpicture,jdbcType=VARCHAR},
+      cintroduce = #{record.cintroduce,jdbcType=VARCHAR},
+      cgrade = #{record.cgrade,jdbcType=VARCHAR},
+      crequirements = #{record.crequirements,jdbcType=INTEGER},
+      cnumber = #{record.cnumber,jdbcType=VARCHAR},
+      uid = #{record.uid,jdbcType=INTEGER},
+      update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      state = #{record.state,jdbcType=BIT}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.cu.weiketang.pojo.Course">
+    update course
+    <set>
+      <if test="cname != null">
+        cname = #{cname,jdbcType=VARCHAR},
+      </if>
+      <if test="cpicture != null">
+        cpicture = #{cpicture,jdbcType=VARCHAR},
+      </if>
+      <if test="cintroduce != null">
+        cintroduce = #{cintroduce,jdbcType=VARCHAR},
+      </if>
+      <if test="cgrade != null">
+        cgrade = #{cgrade,jdbcType=VARCHAR},
+      </if>
+      <if test="crequirements != null">
+        crequirements = #{crequirements,jdbcType=INTEGER},
+      </if>
+      <if test="cnumber != null">
+        cnumber = #{cnumber,jdbcType=VARCHAR},
+      </if>
+      <if test="uid != null">
+        uid = #{uid,jdbcType=INTEGER},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="state != null">
+        state = #{state,jdbcType=BIT},
+      </if>
+    </set>
+    where cid = #{cid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.cu.weiketang.pojo.Course">
+    update course
+    set cname = #{cname,jdbcType=VARCHAR},
+      cpicture = #{cpicture,jdbcType=VARCHAR},
+      cintroduce = #{cintroduce,jdbcType=VARCHAR},
+      cgrade = #{cgrade,jdbcType=VARCHAR},
+      crequirements = #{crequirements,jdbcType=INTEGER},
+      cnumber = #{cnumber,jdbcType=VARCHAR},
+      uid = #{uid,jdbcType=INTEGER},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      state = #{state,jdbcType=BIT}
+    where cid = #{cid,jdbcType=INTEGER}
+  </update>
+  <select id="selectByExampleWithRowbounds" parameterType="com.cu.weiketang.pojo.CourseExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from course
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+</mapper>

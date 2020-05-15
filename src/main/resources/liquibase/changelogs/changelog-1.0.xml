@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+    <!--如果一开始没用，后期想引入 liquibase，可以把以前的数据库导出成 sql，然后引入 sql 文件-->
+    <!--<include file="liquibase/changelogs/project.sql" relativeToChangelogFile="false"/>-->
+
+    <changeSet id="20200428-01" author="cg">
+        <!--预判断-->
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="user"/>
+                <tableExists tableName="course"/>
+                <tableExists tableName="lesson"/>
+                <tableExists tableName="record"/>
+                <tableExists tableName="discussion"/>
+                <tableExists tableName="notes"/>
+            </not>
+        </preConditions>
+        <!--创建表-->
+        <createTable tableName="user">
+            <column name="uid" type="integer(30)" encoding="utf8" remarks="userid" autoIncrement="true"> <!--创建属性id-->
+                <constraints primaryKey="true" nullable="false" /> <!--设置为主键-->
+            </column>
+            <column name="unumber" type="varchar(50)" encoding="utf8" remarks="user账户">
+                <constraints  nullable="false" unique="true"/>
+            </column>
+            <column name="upassword" type="varchar(50)" encoding="utf8" remarks="user密码">
+                <constraints  nullable="false"/>
+            </column>
+            <column name="ucollage" type="varchar(100)" encoding="utf8" remarks="user大学">
+                <constraints  nullable="false"/>
+            </column>
+            <column name="uname" type="varchar(30)" encoding="utf8" remarks="user名字">
+                <constraints  nullable="true"/>
+            </column>
+            <column name="type" type="integer(2)" encoding="utf8" remarks="user类型">
+                <constraints  nullable="false"/>
+            </column>
+        </createTable>
+        <createTable tableName="course">
+            <column name="cid" type="integer(100)" encoding="utf8" remarks="课程id" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false" />
+            </column>
+            <column name="cname" type="varchar(100)" encoding="utf8" remarks="课程名字">
+                <constraints  nullable="false" />
+            </column>
+            <column name="cpicture" type="varchar(500)" encoding="utf8" remarks="课程图片">
+                <constraints  nullable="false" />
+            </column>
+            <column name="cintroduce" type="varchar(1000)" encoding="utf8" remarks="课程介绍">
+                <constraints  nullable="false" />
+            </column>
+            <column name="cgrade" type="varchar(10)" encoding="utf8" remarks="课程年级">
+                <constraints  nullable="false" />
+            </column>
+            <column name="crequirements" type="integer(2)" encoding="utf8" remarks="学习要求">
+                <constraints  nullable="false" />
+            </column>
+            <column name="cnumber" type="varchar(50)" encoding="utf8" remarks="订阅次数">
+                <constraints  nullable="false" />
+            </column>
+            <column name="uid" type="integer(30)" encoding="utf8" remarks="教师id">
+                <constraints  nullable="false"  foreignKeyName="fk_course_user_uid" referencedTableName="user" referencedColumnNames="uid"/>
+            </column>
+            <column name="update_time" type="timestamp" encoding="utf8" remarks="更新时间">
+                <constraints  nullable="false"/>
+            </column>
+            <column name="state" type="boolean" encoding="utf8" remarks="是否删除">
+                <constraints  nullable="false"/>
+            </column>
+        </createTable>
+        <createTable tableName="discussion">
+            <column name="did" type="integer(300)" encoding="utf8" remarks="讨论id" autoIncrement="true"> <!--创建属性id-->
+                <constraints primaryKey="true" nullable="false" /> <!--设置为主键-->
+            </column>
+            <column name="uid" type="integer(30)" encoding="utf8" remarks="学生id">
+                <constraints  nullable="false"  foreignKeyName="fk_discussion_user_uid" referencedTableName="user" referencedColumnNames="uid"/>
+            </column>
+            <column name="ucollage" type="varchar(100)" encoding="utf8" remarks="user大学">
+                <constraints  nullable="false" />
+            </column>
+            <column name="uname" type="varchar(30)" encoding="utf8" remarks="user名字">
+                <constraints  nullable="true" />
+            </column>
+            <column name="dcontent" type="varchar(1000)" encoding="utf8" remarks="讨论内容">
+                <constraints  nullable="false"/>
+            </column>
+            <column name="lid" type="integer(200)" encoding="utf8" remarks="节id" >
+                <constraints nullable="false" />
+            </column>
+        </createTable>
+        <createTable tableName="lesson">
+            <column name="lid" type="integer(200)" encoding="utf8" remarks="节id" autoIncrement="true"> <!--创建属性id-->
+                <constraints primaryKey="true" nullable="false" /> <!--设置为主键-->
+            </column>
+            <column name="lname" type="varchar(100)" encoding="utf8" remarks="节名称">
+                <constraints  nullable="false" />
+            </column>
+            <column name="lvideo" type="varchar(100)" encoding="utf8" remarks="节视频">
+                <constraints  nullable="false" />
+            </column>
+            <column name="chapter_id" type="integer(10)" encoding="utf8" remarks="章序号">
+                <constraints  nullable="false" />
+            </column>
+            <column name="chapter_name" type="varchar(100)" encoding="utf8" remarks="章名称">
+                <constraints  nullable="false" />
+            </column>
+            <column name="cid" type="Integer(100)" encoding="utf8" remarks="课程id">
+                <constraints  nullable="false" />
+            </column>
+        </createTable>
+        <createTable tableName="record">
+            <column name="rid" type="integer(200)" encoding="utf8" remarks="学习记录" autoIncrement="true"> <!--创建属性id-->
+                <constraints primaryKey="true" nullable="false" /> <!--设置为主键-->
+            </column>
+            <column name="uid" type="integer(30)" encoding="utf8" remarks="学生id">
+                <constraints  nullable="false" foreignKeyName="fk_record_user_uid" referencedTableName="user" referencedColumnNames="uid"/>
+            </column>
+            <column name="cid" type="integer(100)" encoding="utf8" remarks="课程id">
+                <constraints  nullable="false" />
+            </column>
+            <column name="lid" type="integer(200)" encoding="utf8" remarks="节id">
+                <constraints  nullable="false" />
+            </column>
+            <column name="rtime" type="timestamp" encoding="utf8" remarks="更新时间">
+                <constraints  nullable="false"/>
+            </column>
+            <column name="lnumber" type="integer(200)" encoding="utf8" remarks="已经观看节数">
+                <constraints  nullable="false" />
+            </column>
+            <column name="utime" type="timestamp" encoding="utf8" remarks="登录时间">
+                <constraints  nullable="false"/>
+            </column>
+        </createTable>
+        <createTable tableName="notes">
+            <column name="nid" type="integer(500)" encoding="utf8" remarks="笔记id" autoIncrement="true"> <!--创建属性id-->
+                <constraints primaryKey="true" nullable="false" /> <!--设置为主键-->
+            </column>
+            <column name="uid" type="integer(30)" encoding="utf8" remarks="学生id">
+                <constraints  nullable="false" foreignKeyName="fk_notes_user_uid" referencedTableName="user" referencedColumnNames="uid"/>
+            </column>
+            <column name="ucontent" type="varchar(1000)" encoding="utf8" remarks="笔记内容">
+                <constraints  nullable="false" />
+            </column>
+        </createTable>
+    </changeSet>
+</databaseChangeLog>
